@@ -13,23 +13,38 @@ class Piece:
         self.alive = False
 
 class Pawn(Piece):
-    def find_all_possible_moves(self, board_positions):
+    def find_all_possible_moves(self, pieces):
+        '''
+        pieces do not include self piece 
+        '''
         pass
 
 class Rook(Piece):
-    def find_all_possible_moves(self, board_positions):
+    def find_all_possible_moves(self, pieces):
+        '''
+        pieces do not include self piece 
+        '''
         pass
 
 class Knight(Piece):
-    def find_all_possible_moves(self, board_positions):
+    def find_all_possible_moves(self, pieces):
+        '''
+        pieces do not include self piece 
+        '''
         pass
 
 class Bishop(Piece):
-    def find_all_possible_moves(self, board_positions):
+    def find_all_possible_moves(self, pieces):
+        '''
+        pieces do not include self piece 
+        '''
         pass
 
 class Queen(Piece):
-    def find_all_possible_moves(self, board_positions):
+    def find_all_possible_moves(self, pieces):
+        '''
+        pieces do not include self piece 
+        '''
         pass
 
 class King(Piece):
@@ -37,7 +52,10 @@ class King(Piece):
         self.check = False
         self.checkmate = False
 
-    def find_all_possible_moves(self, board_positions):
+    def find_all_possible_moves(self, pieces):
+        '''
+        pieces do not include self piece 
+        '''
         pass
 
     def update_check(self, check):
