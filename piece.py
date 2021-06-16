@@ -1,6 +1,9 @@
 
 
 class Piece:
+    '''
+    this class should contain all information related to a single piece
+    '''
     def __init__(self, position, is_white):
         self.position = position
         self.alive = True
@@ -15,7 +18,9 @@ class Piece:
 class Pawn(Piece):
     def find_all_possible_moves(self, pieces):
         '''
-        pieces do not include self piece 
+        pieces do not include self piece. These functions should return a list
+        of tuples indicating all possible coordinates that the piece can move given
+        its coordinates, and the coordinates of every other piece on the board
         '''
         pass
 
@@ -59,7 +64,15 @@ class King(Piece):
         pass
 
     def update_check(self, check):
-        self.check = check
+        '''
+        this function should check whether the king piece is under check, if so set 
+        self.check to true
+        '''
+        pass
 
     def update_checkmate(self, checkmate):
-        self.checkmate = checkmate
+        '''
+        this function should check whether the king piece is under checkmate, if so set 
+        self.check to true
+        '''
+        pass
