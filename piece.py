@@ -3,6 +3,8 @@
 class Piece:
     '''
     this class should contain all information related to a single piece
+    position: (str, int) - (col, row)
+    is_white: bool - White pieces are True Black are False
     '''
     def __init__(self, position, is_white):
         self.position = position
@@ -23,6 +25,16 @@ class Pawn(Piece):
         its coordinates, and the coordinates of every other piece on the board
         '''
         pass
+    
+    def __str__(self):
+        return "Pawn"
+    
+    def print_game(self):
+        return "P"
+    
+    def __repr__(self):
+        return self.__str__()
+    
 
 class Rook(Piece):
     def find_all_possible_moves(self, pieces):
