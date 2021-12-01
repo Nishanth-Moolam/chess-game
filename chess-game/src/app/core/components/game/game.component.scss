@@ -7,16 +7,14 @@ th {
     border: 3px solid black;
 }
 
-.board { 
-    padding: 0;
-    margin: 0;
-    flex: 0;
+.options { 
+    padding-right: 0;
 }
 
-.options { 
-    padding-left: 2.5%;
+.logger { 
+    padding-left: 0;
 }
 
 .gamepanel { 
-    margin-right: 0;
+    margin: 0;
 }

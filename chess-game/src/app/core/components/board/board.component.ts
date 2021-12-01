@@ -8,6 +8,7 @@ import { CoreService } from 'src/app/core/core.service';
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
+  showCircle = false;
 
   constructor(
     private coreService: CoreService
@@ -17,7 +18,8 @@ export class BoardComponent implements OnInit {
   }
 
   test() { 
-    console.log('click logged')
+    this.showCircle = !this.showCircle
+    console.log(this.showCircle)
   }
 
 }

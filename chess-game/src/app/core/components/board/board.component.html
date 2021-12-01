@@ -1,8 +1,16 @@
 <div>
-    <table class="">
+    <table class="center">
         <tr>
-            <th class="white"><img class="piece" (click)="test()" src="assets/rook-black.png"></th>
-            <th class="black"><img class="piece" src="assets/knight-black.png"></th>
+            <th class="white">
+                <div [ngClass]="{ circle: showCircle }">
+                    <img class="piece" (click)="test()" src="assets/rook-black.png">
+                </div>
+            </th>
+            <th class="black">
+                <div [ngClass]="{ circle: showCircle }">
+                    <img class="piece" src="assets/knight-black.png">
+                </div>
+            </th>
             <th class="white"><img class="piece" src="assets/bishop-black.png"></th>
             <th class="black"><img class="piece" src="assets/queen-black.png"></th>
             <th class="white"><img class="piece" src="assets/king-black.png"></th>
