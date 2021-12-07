@@ -2,7 +2,7 @@ tr {
     height: 70px;
 }
 
-th { 
+td { 
     width: 70px;
 }
 
@@ -21,6 +21,9 @@ table {
 }
 
 .circle { 
+    width: 60px;
+    height: 60px;
+    margin: auto;
     background-color: rgba(185, 184, 184, 0.87);
     border-radius: 1000px;
 }

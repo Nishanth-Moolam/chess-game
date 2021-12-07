@@ -1,6 +1,21 @@
 <div>
     <table class="center">
-        <tr>
+        <tr *ngFor="let row of board | keyvalue">
+            <td 
+                (click)="findMovesOrMovePiece(row.key, col.key)" 
+                *ngFor="let col of row.value | keyvalue" 
+                [ngClass]="boardColor[row.key][col.key]"
+            >
+                <!-- {{col.key}}{{row.key}} -->
+                <div [ngClass]="{ circle: boardCircle[row.key][col.key] }">
+                    <ng-container *ngIf="col.value !== null && col.value.type !== null">
+                        <img class="piece" src={{urlConcat(col.value.type)}}>
+                    </ng-container>
+                </div>
+            </td>
+        </tr> 
+        
+        <!-- <tr>
             <th class="white">
                 <div [ngClass]="{ circle: showCircle }">
                     <img class="piece" (click)="test()" src="assets/rook-black.png">
@@ -87,6 +102,6 @@
             <th class="white"><img class="piece" src="assets/bishop-white.png"></th>
             <th class="black"><img class="piece" src="assets/knight-white.png"></th>
             <th class="white"><img class="piece" src="assets/rook-white.png"></th>
-        </tr>
+        </tr> -->
     </table>
 </div>
