@@ -3,12 +3,12 @@
         <div class="col-md-3 col-sm-3 options">
             <table>
                 <tr>
-                    <th>test</th>
+                    <th><button (click)="resetBoard()">Reset</button></th>
                 </tr>
             </table>
         </div>
         <div class="col-md-6 col-sm-6">
-            <app-board></app-board>
+            <app-board [board]="board"></app-board>
         </div>
         <div class="col-md-3 col-sm-3 logger">
             <table>

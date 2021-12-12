@@ -9,16 +9,7 @@ import { Piece } from 'src/app/core/models/piece.interface';
 export class CoreService { 
     constructor () {}
 
-    board: Board = {
-        1: { a: this.rookWhite(), b: this.knightWhite(), c: this.bishopWhite(), d: this.queenWhite(), e: this.kingWhite(), f: this.bishopWhite(), g: this.knightWhite(), h: this.rookWhite() },
-        2: { a: this.pawnWhite(), b: this.pawnWhite(), c: this.pawnWhite(), d: this.pawnWhite(), e: this.pawnWhite(), f: this.pawnWhite(), g: this.pawnWhite(), h: this.pawnWhite() },
-        3: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
-        4: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
-        5: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
-        6: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
-        7: { a: this.pawnBlack(), b: this.pawnBlack(), c: this.pawnBlack(), d: this.pawnBlack(), e: this.pawnBlack(), f: this.pawnBlack(), g: this.pawnBlack(), h: this.pawnBlack() },
-        8: { a: this.rookBlack(), b: this.knightBlack(), c: this.bishopBlack(), d: this.queenBlack(), e: this.kingBlack(), f: this.bishopBlack(), g: this.knightBlack(), h: this.rookBlack() },
-    };
+    board: Board;
 
     boardColor: BoardColor = { 
         1: { a: 'black', b: 'white', c: 'black', d: 'white', e: 'black', f: 'white', g: 'black', h: 'white' },
@@ -33,158 +24,78 @@ export class CoreService {
 
     boardEmptyCircle(): BoardCircle {
         return { 
-                1: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
-                2: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
-                3: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
-                4: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
-                5: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
-                6: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
-                7: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
-                8: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
-            }
+            1: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
+            2: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
+            3: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
+            4: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
+            5: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
+            6: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
+            7: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
+            8: { a: false, b: false, c: false, d: false, e: false, f: false, g: false, h: false },
+        }
     } 
 
-    //moves: Moves = {};
-
-    pawnWhite(): Piece { 
-        return {
-            type: 'pawn-white',
-            isWhite: true,
+    piece(piece: string, color: string): Piece { 
+        return { 
+            type: piece+'-'+color,
+            isWhite: color === 'white' ? true : false,
             isDead: false,
             moves: []
         }
     }
 
-    rookWhite(): Piece { 
-        return {
-            type: 'rook-white',
-            isWhite: true,
-            isDead: false,
-            moves: []
-        }
-    }
-
-    knightWhite(): Piece { 
-        return {
-            type: 'knight-white',
-            isWhite: true,
-            isDead: false,
-            moves: []
-        }
-    }
-
-    bishopWhite(): Piece { 
-        return {
-            type: 'bishop-white',
-            isWhite: true,
-            isDead: false,
-            moves: []
-        }
-    }
-
-    queenWhite(): Piece { 
-        return {
-            type: 'queen-white',
-            isWhite: true,
-            isDead: false,
-            moves: []
-        }
-    }
-
-    kingWhite(): Piece { 
-        return {
-            type: 'king-white',
-            isWhite: true,
-            isDead: false,
-            moves: []
-        }
-    }
-
-    pawnBlack(): Piece { 
-        return {
-            type: 'pawn-black',
-            isWhite: true,
-            isDead: false,
-            moves: []
-        }
-    }
-
-    rookBlack(): Piece { 
-        return {
-            type: 'rook-black',
-            isWhite: true,
-            isDead: false,
-            moves: []
-        }
-    }
-
-    knightBlack(): Piece { 
-        return {
-            type: 'knight-black',
-            isWhite: true,
-            isDead: false,
-            moves: []
-        }
-    }
-
-    bishopBlack(): Piece { 
-        return {
-            type: 'bishop-black',
-            isWhite: true,
-            isDead: false,
-            moves: []
-        }
-    }
-
-    queenBlack(): Piece { 
-        return {
-            type: 'queen-black',
-            isWhite: true,
-            isDead: false,
-            moves: []
-        }
-    }
-
-    kingBlack(): Piece { 
-        return {
-            type: 'king-black',
-            isWhite: true,
-            isDead: false,
-            moves: []
-        }
+    getBoard() { 
+        this.board = JSON.parse(localStorage.getItem('board')) ? JSON.parse(localStorage.getItem('board')) : this.resetBoard()
+        return this.board
     }
 
     updateBoard(board: Board) { 
-        //this.board = board;
+        this.board = board;
+        localStorage.setItem('board', JSON.stringify(this.board))
     }
 
     findMoves(board: Board) { 
         Object.keys(board['2']).map((key, val) => {
-            board['2'][key].moves = [
-                {
-                    isKill: false,
-                    newPosition: ['3', key]
-                },
-                {
-                    isKill: false,
-                    newPosition: ['4', key]
-                }
-            ]
-            board['7'][key].moves = [
-                {
-                    isKill: false,
-                    newPosition: ['6', key]
-                },
-                {
-                    isKill: false,
-                    newPosition: ['5', key]
-                }
-            ]
+            if (board['2'][key]) { 
+                board['2'][key].moves = [
+                    {
+                        isKill: false,
+                        newPosition: ['3', key]
+                    },
+                    {
+                        isKill: false,
+                        newPosition: ['4', key]
+                    }
+                ]
+            }
+            if (board['7'][key]) { 
+                board['7'][key].moves = [
+                    {
+                        isKill: false,
+                        newPosition: ['6', key]
+                    },
+                    {
+                        isKill: false,
+                        newPosition: ['5', key]
+                    }
+                ]
+            }
         })
-        //this.moves = {}
     }
     
     resetBoard() { 
-        //this.board = {}
+        this.board = {
+            1: { a: this.piece('rook', 'white'), b: this.piece('knight', 'white'), c: this.piece('bishop', 'white'), d: this.piece('queen', 'white'), e: this.piece('king', 'white'), f: this.piece('bishop', 'white'), g: this.piece('knight', 'white'), h: this.piece('rook', 'white') },
+            2: { a: this.piece('pawn', 'white'), b: this.piece('pawn', 'white'), c: this.piece('pawn', 'white'), d: this.piece('pawn', 'white'), e: this.piece('pawn', 'white'), f: this.piece('pawn', 'white'), g: this.piece('pawn', 'white'), h: this.piece('pawn', 'white') },
+            3: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
+            4: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
+            5: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
+            6: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
+            7: { a: this.piece('pawn', 'black'), b: this.piece('pawn', 'black'), c: this.piece('pawn', 'black'), d: this.piece('pawn', 'black'), e: this.piece('pawn', 'black'), f: this.piece('pawn', 'black'), g: this.piece('pawn', 'black'), h: this.piece('pawn', 'black') },
+            8: { a: this.piece('rook', 'black'), b: this.piece('knight', 'black'), c: this.piece('bishop', 'black'), d: this.piece('queen', 'black'), e: this.piece('king', 'black'), f: this.piece('bishop', 'black'), g: this.piece('knight', 'black'), h: this.piece('rook', 'black')},
+        };
+        localStorage.setItem('board', JSON.stringify(this.board))
+        this.findMoves(this.board)
+        return this.board
     }
 }

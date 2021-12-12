@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { Board, BoardCircle, BoardColor } from 'src/app/core/models/board.interface';
 import { CoreService } from 'src/app/core/core.service';
@@ -9,9 +9,10 @@ import { CoreService } from 'src/app/core/core.service';
   styleUrls: ['./board.component.scss']
 })
 export class BoardComponent implements OnInit {
+  @Input() board: Board;
+
   showCircle = false;
   startingPosition: string[];
-  board: Board;
   boardColor: BoardColor;
   boardCircle: BoardCircle;
 
@@ -20,7 +21,6 @@ export class BoardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.board = this.coreService.board
     this.boardColor = this.coreService.boardColor
     this.boardCircle = this.coreService.boardEmptyCircle()
     this.coreService.findMoves(this.board)
@@ -44,14 +44,22 @@ export class BoardComponent implements OnInit {
         this.startingPosition = []
         this.showCircle = false
       } else { 
-        // TODO: add a piece swapping function
+        // actual piece moving code:
+        
         let movingPiece = this.board[this.startingPosition[0]][this.startingPosition[1]]
+        let destPiece = this.board[row][col]
+        let move = movingPiece.moves.filter((move) => { 
+          return move.newPosition[0] === row && move.newPosition[1] === col
+        })
+
+        // TODO: add exception for special moves like castles
         this.board[this.startingPosition[0]][this.startingPosition[1]] = null
         this.board[row][col] = movingPiece
         this.boardCircle = this.coreService.boardEmptyCircle()
         this.startingPosition = []
         this.showCircle = false
-        // TODO: add an update board function in services
+        this.coreService.updateBoard(this.board)
+        this.coreService.findMoves(this.board)
       }
     }
   }
