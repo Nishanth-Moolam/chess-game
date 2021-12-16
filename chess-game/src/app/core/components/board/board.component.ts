@@ -15,6 +15,8 @@ export class BoardComponent implements OnInit {
   startingPosition: string[];
   boardColor: BoardColor;
   boardCircle: BoardCircle;
+  loading: boolean = false;
+  errorMessage;
 
   constructor(
     private coreService: CoreService
@@ -23,7 +25,22 @@ export class BoardComponent implements OnInit {
   ngOnInit(): void {
     this.boardColor = this.coreService.boardColor
     this.boardCircle = this.coreService.boardEmptyCircle()
-    this.board = this.coreService.findMoves(this.board)
+    this.getData();
+  }
+
+  getData() { 
+    this.loading = true;
+    this.errorMessage = "";
+    this.coreService.findMoves(this.board)
+      .subscribe((res) => {
+        this.board = res
+      }, (error) => { 
+        console.log(error)
+        this.errorMessage = error;
+        this.loading = false;
+      }, () => { 
+        this.loading = false; 
+      })
   }
 
   findMovesOrMovePiece(row: string, col: string) {
@@ -63,7 +80,7 @@ export class BoardComponent implements OnInit {
     this.startingPosition = []
     this.showCircle = false
     this.coreService.updateBoard(this.board)
-    this.coreService.findMoves(this.board)
+    this.getData()
   }
 
   urlConcat(pieceType: string): string { 

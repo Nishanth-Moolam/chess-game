@@ -1,4 +1,6 @@
 import { Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 
 import { Board, BoardCircle, BoardColor, Stats } from "./models/board.interface";
 import { Piece } from 'src/app/core/models/piece.interface';
@@ -7,7 +9,10 @@ import { Piece } from 'src/app/core/models/piece.interface';
     providedIn: 'root'
 })
 export class CoreService { 
-    constructor () {}
+
+    baseURL: string = "http://127.0.0.1:5000/";
+
+    constructor (private http: HttpClient) {}
 
     board: Board;
     stats: Stats;
@@ -55,36 +60,9 @@ export class CoreService {
         localStorage.setItem('board', JSON.stringify(this.board))
     }
 
-    findMoves(board: Board): Board { 
-        const outputBoard = board;
-
-        Object.keys(outputBoard['2']).map((key, val) => {
-            if (outputBoard['2'][key]) { 
-                outputBoard['2'][key].moves = [
-                    {
-                        isKill: false,
-                        newPosition: ['3', key]
-                    },
-                    {
-                        isKill: false,
-                        newPosition: ['4', key]
-                    }
-                ]
-            }
-            if (outputBoard['7'][key]) { 
-                outputBoard['7'][key].moves = [
-                    {
-                        isKill: false,
-                        newPosition: ['6', key]
-                    },
-                    {
-                        isKill: false,
-                        newPosition: ['5', key]
-                    }
-                ]
-            }
-        })
-        return outputBoard;
+    findMoves(board: Board): Observable<any> { 
+        const body = JSON.stringify(board) 
+        return this.http.post<any>(this.baseURL + '/findmoves', body)
     }
     
     resetBoard() { 
@@ -134,8 +112,33 @@ export class CoreService {
                 h: this.piece('rook', 'black')
             },
         };
+        Object.keys(this.board['2']).map((key, val) => {
+            if (this.board['2'][key]) { 
+                this.board['2'][key].moves = [
+                    {
+                        isKill: false,
+                        newPosition: ['3', key]
+                    },
+                    {
+                        isKill: false,
+                        newPosition: ['4', key]
+                    }
+                ]
+            }
+            if (this.board['7'][key]) { 
+                this.board['7'][key].moves = [
+                    {
+                        isKill: false,
+                        newPosition: ['6', key]
+                    },
+                    {
+                        isKill: false,
+                        newPosition: ['5', key]
+                    }
+                ]
+            }
+        })
         localStorage.setItem('board', JSON.stringify(this.board))
-        this.board = this.findMoves(this.board)
         return this.board
     }
 }
