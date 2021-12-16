@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 
-import { Board, BoardCircle, BoardColor } from "./models/board.interface";
+import { Board, BoardCircle, BoardColor, Stats } from "./models/board.interface";
 import { Piece } from 'src/app/core/models/piece.interface';
 
 @Injectable({
@@ -10,6 +10,7 @@ export class CoreService {
     constructor () {}
 
     board: Board;
+    stats: Stats;
 
     boardColor: BoardColor = { 
         1: { a: 'black', b: 'white', c: 'black', d: 'white', e: 'black', f: 'white', g: 'black', h: 'white' },
@@ -54,10 +55,12 @@ export class CoreService {
         localStorage.setItem('board', JSON.stringify(this.board))
     }
 
-    findMoves(board: Board) { 
-        Object.keys(board['2']).map((key, val) => {
-            if (board['2'][key]) { 
-                board['2'][key].moves = [
+    findMoves(board: Board): Board { 
+        const outputBoard = board;
+
+        Object.keys(outputBoard['2']).map((key, val) => {
+            if (outputBoard['2'][key]) { 
+                outputBoard['2'][key].moves = [
                     {
                         isKill: false,
                         newPosition: ['3', key]
@@ -68,8 +71,8 @@ export class CoreService {
                     }
                 ]
             }
-            if (board['7'][key]) { 
-                board['7'][key].moves = [
+            if (outputBoard['7'][key]) { 
+                outputBoard['7'][key].moves = [
                     {
                         isKill: false,
                         newPosition: ['6', key]
@@ -81,21 +84,58 @@ export class CoreService {
                 ]
             }
         })
+        return outputBoard;
     }
     
     resetBoard() { 
         this.board = {
-            1: { a: this.piece('rook', 'white'), b: this.piece('knight', 'white'), c: this.piece('bishop', 'white'), d: this.piece('queen', 'white'), e: this.piece('king', 'white'), f: this.piece('bishop', 'white'), g: this.piece('knight', 'white'), h: this.piece('rook', 'white') },
-            2: { a: this.piece('pawn', 'white'), b: this.piece('pawn', 'white'), c: this.piece('pawn', 'white'), d: this.piece('pawn', 'white'), e: this.piece('pawn', 'white'), f: this.piece('pawn', 'white'), g: this.piece('pawn', 'white'), h: this.piece('pawn', 'white') },
+            1: { 
+                a: this.piece('rook', 'white'), 
+                b: this.piece('knight', 'white'), 
+                c: this.piece('bishop', 'white'), 
+                d: this.piece('queen', 'white'), 
+                e: this.piece('king', 'white'), 
+                f: this.piece('bishop', 'white'), 
+                g: this.piece('knight', 'white'), 
+                h: this.piece('rook', 'white') 
+            },
+            2: { 
+                a: this.piece('pawn', 'white'), 
+                b: this.piece('pawn', 'white'), 
+                c: this.piece('pawn', 'white'), 
+                d: this.piece('pawn', 'white'), 
+                e: this.piece('pawn', 'white'), 
+                f: this.piece('pawn', 'white'), 
+                g: this.piece('pawn', 'white'), 
+                h: this.piece('pawn', 'white') 
+            },
             3: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
             4: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
             5: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
             6: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
-            7: { a: this.piece('pawn', 'black'), b: this.piece('pawn', 'black'), c: this.piece('pawn', 'black'), d: this.piece('pawn', 'black'), e: this.piece('pawn', 'black'), f: this.piece('pawn', 'black'), g: this.piece('pawn', 'black'), h: this.piece('pawn', 'black') },
-            8: { a: this.piece('rook', 'black'), b: this.piece('knight', 'black'), c: this.piece('bishop', 'black'), d: this.piece('queen', 'black'), e: this.piece('king', 'black'), f: this.piece('bishop', 'black'), g: this.piece('knight', 'black'), h: this.piece('rook', 'black')},
+            7: { 
+                a: this.piece('pawn', 'black'), 
+                b: this.piece('pawn', 'black'), 
+                c: this.piece('pawn', 'black'), 
+                d: this.piece('pawn', 'black'), 
+                e: this.piece('pawn', 'black'), 
+                f: this.piece('pawn', 'black'), 
+                g: this.piece('pawn', 'black'), 
+                h: this.piece('pawn', 'black') 
+            },
+            8: { 
+                a: this.piece('rook', 'black'), 
+                b: this.piece('knight', 'black'), 
+                c: this.piece('bishop', 'black'), 
+                d: this.piece('queen', 'black'), 
+                e: this.piece('king', 'black'), 
+                f: this.piece('bishop', 'black'), 
+                g: this.piece('knight', 'black'), 
+                h: this.piece('rook', 'black')
+            },
         };
         localStorage.setItem('board', JSON.stringify(this.board))
-        this.findMoves(this.board)
+        this.board = this.findMoves(this.board)
         return this.board
     }
 }

@@ -23,7 +23,7 @@ export class BoardComponent implements OnInit {
   ngOnInit(): void {
     this.boardColor = this.coreService.boardColor
     this.boardCircle = this.coreService.boardEmptyCircle()
-    this.coreService.findMoves(this.board)
+    this.board = this.coreService.findMoves(this.board)
   }
 
   findMovesOrMovePiece(row: string, col: string) {
@@ -44,24 +44,26 @@ export class BoardComponent implements OnInit {
         this.startingPosition = []
         this.showCircle = false
       } else { 
-        // actual piece moving code:
-        
-        let movingPiece = this.board[this.startingPosition[0]][this.startingPosition[1]]
-        let destPiece = this.board[row][col]
-        let move = movingPiece.moves.filter((move) => { 
-          return move.newPosition[0] === row && move.newPosition[1] === col
-        })
-
-        // TODO: add exception for special moves like castles
-        this.board[this.startingPosition[0]][this.startingPosition[1]] = null
-        this.board[row][col] = movingPiece
-        this.boardCircle = this.coreService.boardEmptyCircle()
-        this.startingPosition = []
-        this.showCircle = false
-        this.coreService.updateBoard(this.board)
-        this.coreService.findMoves(this.board)
+        this.movePiece(row, col)
       }
     }
+  }
+
+  movePiece(row: string, col: string) { 
+    let movingPiece = this.board[this.startingPosition[0]][this.startingPosition[1]]
+    let destPiece = this.board[row][col]
+    let move = movingPiece.moves.filter((move) => { 
+      return move.newPosition[0] === row && move.newPosition[1] === col
+    })
+
+    // TODO: add exception for special moves like castles
+    this.board[this.startingPosition[0]][this.startingPosition[1]] = null
+    this.board[row][col] = movingPiece
+    this.boardCircle = this.coreService.boardEmptyCircle()
+    this.startingPosition = []
+    this.showCircle = false
+    this.coreService.updateBoard(this.board)
+    this.coreService.findMoves(this.board)
   }
 
   urlConcat(pieceType: string): string { 
