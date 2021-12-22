@@ -1,9 +1,23 @@
 # chess-game
-This project is to create a working chess game angular and python
+### This project is to create a working chess game angular and python
 
-## instructions to run frontend
-`cd chess-game` -> navigate to the angular project folder
+## Instructions to run backend
+```
+$ cd server
+$ virtualenv env
+$ source env/bin/activate
+$ pip install -r requirements.txt
+$ python app.py
+```
+(virtualenv needs to be installed)
 
-`npm i` -> install dependencies
+running on port 5000
 
-`npm start` -> start server, running on port 4200
+## Instructions to run frontend
+```
+$ cd chess-game
+$ npm i
+$ npm start
+```
+
+running on port 4200
