@@ -62,6 +62,7 @@ export class BoardComponent implements OnInit {
         this.showCircle = false
       } else { 
         this.movePiece(row, col)
+        this.coreService.updateSelectedPlayer();
       }
     }
   }

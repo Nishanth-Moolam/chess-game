@@ -9,9 +9,11 @@ app = Flask(__name__)
 
 class FindMoves(MethodView):
     def post(self):
-        board = json.loads(request.data)
-        # print (board['1']['a'])
-        return find_moves(board)
+        data = json.loads(request.data)
+        board = data['board']
+        selected_player = data['selectedPlayer']
+        # print (selected_player)
+        return find_moves(board, selected_player)
 
 app.add_url_rule('/findmoves', view_func=FindMoves.as_view('findmoves'))
 

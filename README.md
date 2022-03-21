@@ -1,5 +1,5 @@
 # chess-game
-### This project is to create a working chess game angular and python
+### This project is to create a working chess game in angular and python
 
 ## Instructions to run backend
 ```

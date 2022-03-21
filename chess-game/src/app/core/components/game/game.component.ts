@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreService } from '../../core.service';
+import { SelectedPlayer } from '../../enums/selected-player';
 import { Board } from '../../models/board.interface';
 
 @Component({
@@ -9,6 +10,7 @@ import { Board } from '../../models/board.interface';
 })
 export class GameComponent implements OnInit {
   board: Board;
+  selectedPlayer: SelectedPlayer;
 
   constructor(
     private coreService: CoreService
@@ -16,9 +18,11 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void {
     this.board = this.coreService.getBoard();
+    this.selectedPlayer = this.coreService.getSelectedPlayer();
   }
 
   resetBoard() { 
     this.board = this.coreService.resetBoard()
+    this.selectedPlayer = this.coreService.resetSelectedPlayer();
   }
 }

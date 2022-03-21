@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 
 import { Board, BoardCircle, BoardColor, Stats } from "./models/board.interface";
 import { Piece } from 'src/app/core/models/piece.interface';
+import { SelectedPlayer } from "./enums/selected-player";
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +17,7 @@ export class CoreService {
 
     board: Board;
     stats: Stats;
+    selectedPlayer: SelectedPlayer;
 
     boardColor: BoardColor = { 
         1: { a: 'black', b: 'white', c: 'black', d: 'white', e: 'black', f: 'white', g: 'black', h: 'white' },
@@ -58,11 +60,6 @@ export class CoreService {
     updateBoard(board: Board) { 
         this.board = board;
         localStorage.setItem('board', JSON.stringify(this.board))
-    }
-
-    findMoves(board: Board): Observable<any> { 
-        const body = JSON.stringify(board) 
-        return this.http.post<any>(this.baseURL + '/findmoves', body)
     }
     
     resetBoard() { 
@@ -140,5 +137,31 @@ export class CoreService {
         })
         localStorage.setItem('board', JSON.stringify(this.board))
         return this.board
+    }
+
+    getSelectedPlayer() { 
+        this.selectedPlayer = JSON.parse(localStorage.getItem('selectedPlayer')) ? JSON.parse(localStorage.getItem('selectedPlayer')) : SelectedPlayer.WHITE
+        return this.selectedPlayer
+    }
+
+    updateSelectedPlayer() { 
+        if (this.selectedPlayer === SelectedPlayer.WHITE) { 
+            this.selectedPlayer = SelectedPlayer.BLACK;
+        } else { 
+            this.selectedPlayer = SelectedPlayer.WHITE;
+        }
+        localStorage.setItem('selectedPlayer', JSON.stringify(this.selectedPlayer))
+    }
+
+    resetSelectedPlayer() { 
+        this.selectedPlayer = SelectedPlayer.WHITE;
+        localStorage.setItem('selectedPlayer', JSON.stringify(this.selectedPlayer))
+        return this.selectedPlayer
+    }
+
+    findMoves(board: Board): Observable<any> { 
+        const body = JSON.stringify({"board": board, "selectedPlayer": this.selectedPlayer}) 
+        // const body = JSON.stringify(board) 
+        return this.http.post<any>(this.baseURL + '/findmoves', body)
     }
 }
