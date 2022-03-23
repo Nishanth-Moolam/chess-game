@@ -11,3 +11,4 @@ def find_moves(board, selected_player):
     #         # c.board[i][j].find_possible_moves()
     #         # print (c.board[i][j].out())
     return c.display_board()
+    # return board
