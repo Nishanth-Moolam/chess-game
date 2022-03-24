@@ -6,4 +6,5 @@ export interface Piece {
     //position: string,
     isDead: boolean,
     moves: Move[]
+    unmoved?: boolean;
 }

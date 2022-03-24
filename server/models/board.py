@@ -10,10 +10,7 @@ class Board:
         # attack positions of black pieces (attacking white team)
         self.black_attack_positions = []
 
-        if selected_player == 'WHITE':
-            self.selected_player = 'BLACK'
-        else:
-            self.selected_player = 'WHITE'
+        self.selected_player = selected_player
 
         self.map_pieces(board)
         self.get_exact_moves()
@@ -29,19 +26,20 @@ class Board:
                     piece_type = board[row][col]['type'].split('-')[0]
                     is_dead = board[row][col]['isDead']
                     is_white = board[row][col]['isWhite']
+                    unmoved = board[row][col]['unmoved'] if ('unmoved' in board[row][col]) else False
                     position = [row, col]
                     if piece_type == 'pawn':
-                        self.board[row][col] = Pawn(is_dead=is_dead, is_white=is_white, position=position)
+                        self.board[row][col] = Pawn(is_dead=is_dead, is_white=is_white, position=position, unmoved=unmoved)
                     elif piece_type == 'rook':
-                        self.board[row][col] = Rook(is_dead=is_dead, is_white=is_white, position=position)
+                        self.board[row][col] = Rook(is_dead=is_dead, is_white=is_white, position=position, unmoved=unmoved)
                     elif piece_type == 'knight':
-                        self.board[row][col] = Knight(is_dead=is_dead, is_white=is_white, position=position)
+                        self.board[row][col] = Knight(is_dead=is_dead, is_white=is_white, position=position, unmoved=unmoved)
                     elif piece_type == 'bishop':
-                        self.board[row][col] = Bishop(is_dead=is_dead, is_white=is_white, position=position)
+                        self.board[row][col] = Bishop(is_dead=is_dead, is_white=is_white, position=position, unmoved=unmoved)
                     elif piece_type == 'queen':
-                        self.board[row][col] = Queen(is_dead=is_dead, is_white=is_white, position=position)
+                        self.board[row][col] = Queen(is_dead=is_dead, is_white=is_white, position=position, unmoved=unmoved)
                     elif piece_type == 'king':
-                        self.board[row][col] = King(is_dead=is_dead, is_white=is_white, position=position)
+                        self.board[row][col] = King(is_dead=is_dead, is_white=is_white, position=position, unmoved=unmoved)
 
     def get_exact_moves(self):
         '''
@@ -54,7 +52,7 @@ class Board:
         for row in row_index:
             for col in col_index:
                 # only adds moves to the current player
-                if self.board[row][col] and self.xnor(a = (self.selected_player == 'WHITE'), b = self.board[row][col].is_white):
+                if self.board[row][col] and self.xnor(a = (self.selected_player == 'BLACK'), b = self.board[row][col].is_white):
 
                     piece = self.board[row][col]
                     row_i, col_i = row_index.index(row), col_index.index(col)
@@ -339,6 +337,36 @@ class Board:
             elif not attack_piece:
                 piece.add_move(position = position, is_kill = False)
                 self.add_attack_position(piece, position)
+
+        # castle moves
+        if piece.unmoved and self.board[row][col_index[0]].unmoved:
+            is_empty = True
+            for i in [1, 2, 3]:
+                if self.board[row][col_index[i]]:
+                    is_empty = False
+            if is_empty:
+                piece.add_move(
+                    position = [row, col_index[1]],
+                    is_kill = False,
+                    castle = {
+                        'rookStartPosition': [row, col_index[0]], 
+                        'rookEndPosition': [row, col_index[2]], 
+                    }
+                )
+        if piece.unmoved and self.board[row][col_index[7]] and self.board[row][col_index[7]].unmoved:
+            is_empty = True
+            for i in [5, 6]:
+                if self.board[row][col_index[i]]:
+                    is_empty = False
+            if is_empty:
+                piece.add_move(
+                    position = [row, col_index[6]],
+                    is_kill = False,
+                    castle = {
+                        'rookStartPosition': [row, col_index[7]], 
+                        'rookEndPosition': [row, col_index[5]], 
+                    }
+                )
 
     def display_board(self):
         output_board = empty_board()

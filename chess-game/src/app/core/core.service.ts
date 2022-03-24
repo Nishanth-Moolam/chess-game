@@ -48,6 +48,7 @@ export class CoreService {
             type: piece+'-'+color,
             isWhite: color === 'white' ? true : false,
             isDead: false,
+            unmoved: true,
             moves: []
         }
     }

@@ -9,14 +9,15 @@ class Piece:
             return piece_type+'-white'
         return piece_type+'-black'
 
-    def add_move(self, position, is_kill):
+    def add_move(self, position, is_kill, castle=None):
         '''
         appends a move that assumes false isKill. This must be overriden (or changed)
         '''
         self.moves.append(
             {
             "isKill": is_kill,
-            "newPosition": position
+            "newPosition": position,
+            "castle": castle
             }
         )
 
@@ -28,11 +29,12 @@ class Piece:
             "type":self.piece_type(self.is_white, self.type), 
             "isWhite": self.is_white,
             "isDead": self.is_dead,
-            "moves": self.moves
+            "moves": self.moves,
+            "unmoved": self.unmoved
             }
 
 class Pawn(Piece):
-    def __init__(self, is_dead, is_white, position):
+    def __init__(self, is_dead, is_white, position, unmoved):
         """
         is_dead: boolean
         is_white: boolean
@@ -41,6 +43,7 @@ class Pawn(Piece):
         self.is_white = is_white
         self.type = 'pawn'
         self.position = position
+        self.unmoved = unmoved
         self.moves = []
 
     def find_possible_moves(self):
@@ -68,11 +71,12 @@ class Pawn(Piece):
         return new_positions
 
 class Rook(Piece):
-    def __init__(self, is_dead, is_white, position):
+    def __init__(self, is_dead, is_white, position, unmoved):
         self.is_dead = is_dead
         self.is_white = is_white
         self.type = 'rook'
         self.position = position
+        self.unmoved = unmoved
         self.moves = []
 
     def find_possible_moves(self):
@@ -93,11 +97,12 @@ class Rook(Piece):
         return new_positions
 
 class Knight(Piece):
-    def __init__(self, is_dead, is_white, position):
+    def __init__(self, is_dead, is_white, position, unmoved):
         self.is_dead = is_dead
         self.is_white = is_white
         self.type = 'knight'
         self.position = position
+        self.unmoved = unmoved
         self.moves = []
 
     def find_possible_moves(self):
@@ -144,11 +149,12 @@ class Knight(Piece):
             
 
 class Bishop(Piece):
-    def __init__(self, is_dead, is_white, position):
+    def __init__(self, is_dead, is_white, position, unmoved):
         self.is_dead = is_dead
         self.is_white = is_white
         self.type = 'bishop'
         self.position = position
+        self.unmoved = unmoved
         self.moves = []
 
     def find_possible_moves(self):
@@ -182,11 +188,12 @@ class Bishop(Piece):
         return new_positions
 
 class Queen(Piece):
-    def __init__(self, is_dead, is_white, position):
+    def __init__(self, is_dead, is_white, position, unmoved):
         self.is_dead = is_dead
         self.is_white = is_white
         self.type = 'queen'
         self.position = position
+        self.unmoved = unmoved
         self.moves = []
 
     def find_possible_moves(self):
@@ -229,11 +236,12 @@ class Queen(Piece):
 
 
 class King(Piece):
-    def __init__(self, is_dead, is_white, position):
+    def __init__(self, is_dead, is_white, position, unmoved):
         self.is_dead = is_dead
         self.is_white = is_white
         self.type = 'king'
         self.position = position
+        self.unmoved = unmoved
         self.moves = []
 
     def find_possible_moves(self):

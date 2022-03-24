@@ -69,12 +69,19 @@ export class BoardComponent implements OnInit {
 
   movePiece(row: string, col: string) { 
     let movingPiece = this.board[this.startingPosition[0]][this.startingPosition[1]]
+    movingPiece.unmoved = false;
     let destPiece = this.board[row][col]
     let move = movingPiece.moves.filter((move) => { 
-      return move.newPosition[0] === row && move.newPosition[1] === col
-    })
+      return (move.newPosition[0] === row && move.newPosition[1] === col)
+    })[0]
 
-    // TODO: add exception for special moves like castles
+    if (move.castle) { 
+      let rook = this.board[move.castle.rookStartPosition[0]][move.castle.rookStartPosition[1]]
+      this.board[move.castle.rookEndPosition[0]][move.castle.rookEndPosition[1]] = rook
+      this.board[move.castle.rookStartPosition[0]][move.castle.rookStartPosition[1]] = null
+    } else if (move.enPassant) { 
+      this.board[move.enPassant.killPosition[0]][move.enPassant.killPosition[1]] = null
+    }
     this.board[this.startingPosition[0]][this.startingPosition[1]] = null
     this.board[row][col] = movingPiece
     this.boardCircle = this.coreService.boardEmptyCircle()
