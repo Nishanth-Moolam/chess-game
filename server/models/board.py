@@ -47,7 +47,7 @@ class Board:
         moves in pieces
         * this will need to be refactored to deal with check
         * remember to add en passant
-        * remember to add castle
+        * remember to add castle - done
         '''
         for row in row_index:
             for col in col_index:
@@ -88,6 +88,10 @@ class Board:
                 attack_positions.append([row_index[row_i+1], col_index[col_i+1]])
             if (row_i+1 in board_range) and (col_i-1 in board_range):
                 attack_positions.append([row_index[row_i+1], col_index[col_i-1]])
+
+            # en passant moves
+            
+
         else:
             if (row_i-1 in board_range) and (col_i+1 in board_range):
                 attack_positions.append([row_index[row_i-1], col_index[col_i+1]])

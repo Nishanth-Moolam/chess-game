@@ -123,18 +123,18 @@ export class CoreService {
                     }
                 ]
             }
-            if (this.board['7'][key]) { 
-                this.board['7'][key].moves = [
-                    {
-                        isKill: false,
-                        newPosition: ['6', key]
-                    },
-                    {
-                        isKill: false,
-                        newPosition: ['5', key]
-                    }
-                ]
-            }
+            // if (this.board['7'][key]) { 
+            //     this.board['7'][key].moves = [
+            //         {
+            //             isKill: false,
+            //             newPosition: ['6', key]
+            //         },
+            //         {
+            //             isKill: false,
+            //             newPosition: ['5', key]
+            //         }
+            //     ]
+            // }
         })
         localStorage.setItem('board', JSON.stringify(this.board))
         return this.board
@@ -152,6 +152,8 @@ export class CoreService {
             this.selectedPlayer = SelectedPlayer.WHITE;
         }
         localStorage.setItem('selectedPlayer', JSON.stringify(this.selectedPlayer))
+        console.log(localStorage.getItem('selectedPlayer'))
+        console.log(this.selectedPlayer)
     }
 
     resetSelectedPlayer() { 
@@ -161,6 +163,7 @@ export class CoreService {
     }
 
     findMoves(board: Board): Observable<any> { 
+        console.log(this.selectedPlayer)
         const body = JSON.stringify({"board": board, "selectedPlayer": this.selectedPlayer}) 
         // const body = JSON.stringify(board) 
         return this.http.post<any>(this.baseURL + '/findmoves', body)

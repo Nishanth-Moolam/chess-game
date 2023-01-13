@@ -17,6 +17,7 @@ export class GameComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    console.log('game')
     this.board = this.coreService.getBoard();
     this.selectedPlayer = this.coreService.getSelectedPlayer();
   }

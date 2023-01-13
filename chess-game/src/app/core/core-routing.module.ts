@@ -5,8 +5,9 @@ import { BoardComponent } from './components/board/board.component';
 import { GameComponent  } from './components/game/game.component';
 
 const routes: Routes = [
-    {path: 'board', component: BoardComponent },
-    {path: 'game', component: GameComponent }
+    // {path: 'board', component: BoardComponent },
+    {path: 'game', component: GameComponent },
+    {path: '**', component: GameComponent}
 ];
 
 @NgModule({
