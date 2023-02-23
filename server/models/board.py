@@ -90,6 +90,11 @@ class Board:
                 attack_positions.append([row_index[row_i+1], col_index[col_i-1]])
 
             # en passant moves
+            # if (row_i == 4) and (col_i+1 in board_range):
+            #     attack_positions.append([row_index[row_i+1], col_index[col_i+1]])
+            # if (row_i == 4) and (col_i-1 in board_range):
+            #     attack_positions.append([row_index[row_i+1], col_index[col_i-1]])
+
             
 
         else:
@@ -97,6 +102,13 @@ class Board:
                 attack_positions.append([row_index[row_i-1], col_index[col_i+1]])
             if (row_i-1 in board_range) and (col_i-1 in board_range):
                 attack_positions.append([row_index[row_i-1], col_index[col_i-1]])
+
+            # en passant moves
+            # if (row_i == 3) and (col_i+1 in board_range):
+            #     attack_positions.append([row_index[row_i-1], col_index[col_i+1]])
+            # if (row_i == 3) and (col_i-1 in board_range):
+            #     attack_positions.append([row_index[row_i-1], col_index[col_i-1]])
+            
         # adds possible attacking moves
         for position in attack_positions:
             attack_piece = self.board[position[0]][position[1]]

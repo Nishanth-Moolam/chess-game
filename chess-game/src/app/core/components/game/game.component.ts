@@ -11,6 +11,7 @@ import { Board } from '../../models/board.interface';
 export class GameComponent implements OnInit {
   board: Board;
   selectedPlayer: SelectedPlayer;
+  moves = []
 
   constructor(
     private coreService: CoreService
@@ -20,10 +21,21 @@ export class GameComponent implements OnInit {
     console.log('game')
     this.board = this.coreService.getBoard();
     this.selectedPlayer = this.coreService.getSelectedPlayer();
+    this.coreService.getMoves().subscribe((res) => {
+      this.moves = res ? res : []
+    })
   }
 
   resetBoard() { 
     this.board = this.coreService.resetBoard()
     this.selectedPlayer = this.coreService.resetSelectedPlayer();
+    this.coreService.resetMoves()
+    this.moves = []
+  }
+
+  onUpdateMoves() { 
+    this.coreService.getMoves().subscribe((res) => {
+      this.moves = res ? res : []
+    })
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Board, BoardCircle, BoardColor } from 'src/app/core/models/board.interface';
 import { CoreService } from 'src/app/core/core.service';
@@ -11,12 +11,16 @@ import { CoreService } from 'src/app/core/core.service';
 export class BoardComponent implements OnInit {
   @Input() board: Board;
 
+  @Output() updateMoves = new EventEmitter();
+
   showCircle = false;
   startingPosition: string[];
   boardColor: BoardColor;
   boardCircle: BoardCircle;
   loading: boolean = false;
   errorMessage;
+
+  move;
 
   constructor(
     private coreService: CoreService
@@ -75,6 +79,7 @@ export class BoardComponent implements OnInit {
       return (move.newPosition[0] === row && move.newPosition[1] === col)
     })[0]
 
+    // check if move is castle or en passant
     if (move.castle) { 
       let rook = this.board[move.castle.rookStartPosition[0]][move.castle.rookStartPosition[1]]
       this.board[move.castle.rookEndPosition[0]][move.castle.rookEndPosition[1]] = rook
@@ -82,6 +87,17 @@ export class BoardComponent implements OnInit {
     } else if (move.enPassant) { 
       this.board[move.enPassant.killPosition[0]][move.enPassant.killPosition[1]] = null
     }
+
+    // add move to move list
+    this.move = { 
+      start: [this.startingPosition[0], this.startingPosition[1]], 
+      end: [row, col],
+      piece: movingPiece
+    }
+    this.coreService.addMoves(this.move)
+    this.updateMoves.emit(this.move);
+
+    // update board
     this.board[this.startingPosition[0]][this.startingPosition[1]] = null
     this.board[row][col] = movingPiece
     this.boardCircle = this.coreService.boardEmptyCircle()

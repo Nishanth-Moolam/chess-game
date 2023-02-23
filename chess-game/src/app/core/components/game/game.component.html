@@ -8,12 +8,12 @@
             </table>
         </div>
         <div class="col-md-6 col-sm-6">
-            <app-board [board]="board"></app-board>
+            <app-board (updateMoves)="onUpdateMoves()" [board]="board"></app-board>
         </div>
         <div class="col-md-3 col-sm-3 logger">
             <table>
                 <tr>
-                    <th>test</th>
+                    <th><app-moves [moves]="moves"></app-moves></th>
                 </tr>
             </table>
         </div>

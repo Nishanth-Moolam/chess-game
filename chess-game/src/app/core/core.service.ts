@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 
 import { Board, BoardCircle, BoardColor, Stats } from "./models/board.interface";
 import { Piece } from 'src/app/core/models/piece.interface';
@@ -18,6 +18,7 @@ export class CoreService {
     board: Board;
     stats: Stats;
     selectedPlayer: SelectedPlayer;
+    moves: string[] = [];
 
     boardColor: BoardColor = { 
         1: { a: 'black', b: 'white', c: 'black', d: 'white', e: 'black', f: 'white', g: 'black', h: 'white' },
@@ -64,6 +65,7 @@ export class CoreService {
     }
     
     resetBoard() { 
+        this.resetMoves()
         this.board = {
             1: { 
                 a: this.piece('rook', 'white'), 
@@ -152,8 +154,8 @@ export class CoreService {
             this.selectedPlayer = SelectedPlayer.WHITE;
         }
         localStorage.setItem('selectedPlayer', JSON.stringify(this.selectedPlayer))
-        console.log(localStorage.getItem('selectedPlayer'))
-        console.log(this.selectedPlayer)
+        // console.log(localStorage.getItem('selectedPlayer'))
+        // console.log(this.selectedPlayer)
     }
 
     resetSelectedPlayer() { 
@@ -163,9 +165,24 @@ export class CoreService {
     }
 
     findMoves(board: Board): Observable<any> { 
-        console.log(this.selectedPlayer)
+        // console.log(this.selectedPlayer)
         const body = JSON.stringify({"board": board, "selectedPlayer": this.selectedPlayer}) 
         // const body = JSON.stringify(board) 
         return this.http.post<any>(this.baseURL + '/findmoves', body)
+    }
+
+    addMoves(move): any { 
+        this.moves.push(move)
+        localStorage.setItem('moves', JSON.stringify(this.moves))
+    }
+
+    getMoves(): Observable<any> { 
+        this.moves = JSON.parse(localStorage.getItem('moves')) ? JSON.parse(localStorage.getItem('moves')) : []
+        return of(this.moves)
+    }
+
+    resetMoves() { 
+        this.moves = []
+        localStorage.setItem('moves', JSON.stringify(this.moves))
     }
 }
