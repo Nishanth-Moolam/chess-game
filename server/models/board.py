@@ -27,17 +27,7 @@ class Board:
 
         # this prevents infinite recursion
         if original:
-
-            # print ('is black in check?')
-            # print (self.is_black_check)
-            # print ('is white in check?')
-            # print (self.is_white_check)
-
-            # if board is in check, remove all moves that don't get out of check
-            if self.selected_player == 'BLACK' and self.is_white_check:
-                self.remove_check_moves(self.selected_player)
-            if self.selected_player == 'WHITE' and self.is_black_check:
-                self.remove_check_moves(self.selected_player)
+            self.remove_check_moves(self.selected_player)
 
     def map_pieces(self, board):
         '''
@@ -154,7 +144,11 @@ class Board:
         # adds the possible moves if there is no piece in the way
         for position in all_possible_moves:
             blocking_piece = self.board[position[0]][position[1]]
-            if not blocking_piece:
+            if len(position) > 2:
+                blocking_piece_2 = self.board[position[2]][position[1]]
+            else:
+                blocking_piece_2 = None
+            if not blocking_piece and not blocking_piece_2:
                 self.add_move_if_valid(piece = piece, position = position, is_kill = False)
         
         # print (piece.moves)
@@ -472,6 +466,8 @@ class Board:
 
                         # makes move on temp board (this doesnt work for castling)
                         temp_board_[move['newPosition'][0]][move['newPosition'][1]], temp_board_[row][col] = temp_board_[row][col], None
+                        if move['castle']:
+                            temp_board_[move['castle']['rookEndPosition'][0]][move['castle']['rookEndPosition'][1]], temp_board_[move['castle']['rookStartPosition'][0]][move['castle']['rookStartPosition'][1]] = temp_board_[move['castle']['rookStartPosition'][0]][move['castle']['rookStartPosition'][1]], None
 
                         # creates new board object
                         temp_board = Board(temp_board_, self.selected_player, original=False)

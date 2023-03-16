@@ -63,15 +63,15 @@ class Pawn(Piece):
         if not self.is_white:
             if row+1 < len(row_index):
                 new_positions.append([row_index[row+1], col_index[col]])
-            # first move may move up 2 (row = 1 means second row)
+            # first move may move up 2 (row = 1 means second row) the third element is the position that must be empty to move 2
             if row == 1:
-                new_positions.append([row_index[row+2], col_index[col]])
+                new_positions.append([row_index[row+2], col_index[col], row_index[row+1]])
         elif self.is_white:
             if row-1 >= 0:
                 new_positions.append([row_index[row-1], col_index[col]])
             # first move may move up 2 (row = 1 means second row)
             if row == 6:
-                new_positions.append([row_index[row-2], col_index[col]])
+                new_positions.append([row_index[row-2], col_index[col], row_index[row-1]])
 
         return new_positions
 
