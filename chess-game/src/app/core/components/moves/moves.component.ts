@@ -12,7 +12,7 @@ export class MovesComponent implements OnInit {
   constructor(private coreService: CoreService) { }
 
   ngOnInit(): void {
-    console.log(this.moves)
+    // console.log(this.moves)
   }
 
 }

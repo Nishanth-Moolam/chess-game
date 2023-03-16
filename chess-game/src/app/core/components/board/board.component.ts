@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Board, BoardCircle, BoardColor } from 'src/app/core/models/board.interface';
 import { CoreService } from 'src/app/core/core.service';
+import { SelectedPlayer } from '../../enums/selected-player';
 
 @Component({
   selector: 'app-board',
@@ -19,6 +20,7 @@ export class BoardComponent implements OnInit {
   boardCircle: BoardCircle;
   loading: boolean = false;
   errorMessage;
+  nextPlayer: SelectedPlayer;
 
   move;
 
@@ -37,7 +39,10 @@ export class BoardComponent implements OnInit {
     this.errorMessage = "";
     this.coreService.findMoves(this.board)
       .subscribe((res) => {
-        this.board = res
+        this.board = res.board
+        this.nextPlayer = res.selectedPlayer
+        this.coreService.updateSelectedPlayer(this.nextPlayer);
+        this.coreService.updateBoard(this.board)
       }, (error) => { 
         console.log(error)
         this.errorMessage = error;
@@ -53,8 +58,10 @@ export class BoardComponent implements OnInit {
       let moves = this.board[row][col]?.moves
       if (moves) { 
         moves?.map((move) => { 
-          let position = move.newPosition
-          this.boardCircle[position[0]][position[1]] = true
+          if (move) { 
+            let position = move.newPosition
+            this.boardCircle[position[0]][position[1]] = true 
+          }
         })
         this.startingPosition = [row, col]
         this.showCircle = true
@@ -66,7 +73,6 @@ export class BoardComponent implements OnInit {
         this.showCircle = false
       } else { 
         this.movePiece(row, col)
-        this.coreService.updateSelectedPlayer();
       }
     }
   }
@@ -76,7 +82,7 @@ export class BoardComponent implements OnInit {
     movingPiece.unmoved = false;
     let destPiece = this.board[row][col]
     let move = movingPiece.moves.filter((move) => { 
-      return (move.newPosition[0] === row && move.newPosition[1] === col)
+      return (move && move.newPosition[0] === row && move.newPosition[1] === col)
     })[0]
 
     // check if move is castle or en passant
@@ -90,8 +96,8 @@ export class BoardComponent implements OnInit {
 
     // add move to move list
     this.move = { 
-      start: [this.startingPosition[0], this.startingPosition[1]], 
-      end: [row, col],
+      start: [this.correctRow(this.startingPosition[0]), this.startingPosition[1]], 
+      end: [this.correctRow(row), col],
       piece: movingPiece
     }
     this.coreService.addMoves(this.move)
@@ -111,4 +117,7 @@ export class BoardComponent implements OnInit {
     return 'assets/'+pieceType+'.png'
   }
 
+  correctRow(row) {
+    return this.coreService.correctRow(row)
+  }
 }

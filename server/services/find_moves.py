@@ -10,5 +10,12 @@ def find_moves(board, selected_player):
     #         # print (type(c.board[i][j]))
     #         # c.board[i][j].find_possible_moves()
     #         # print (c.board[i][j].out())
-    return c.display_board()
+    return {'board': c.display_board(), 'selectedPlayer': reverse_selected_player(selected_player)}
     # return board
+
+def reverse_selected_player(selected_player):
+    print (selected_player)
+    if selected_player == 'WHITE':
+        return 'BLACK'
+    else:
+        return 'WHITE'

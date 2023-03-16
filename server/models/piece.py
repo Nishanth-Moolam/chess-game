@@ -46,6 +46,9 @@ class Pawn(Piece):
         self.unmoved = unmoved
         self.moves = []
 
+    def __repr__(self):
+        return f'Pawn({self.is_white})'
+
     def find_possible_moves(self):
         '''
         this method will return all moves possible assuming no other
@@ -57,13 +60,15 @@ class Pawn(Piece):
 
         row = row_index.index(self.position[0])
         col = col_index.index(self.position[1])
-        if self.is_white:
-            new_positions.append([row_index[row+1], col_index[col]])
+        if not self.is_white:
+            if row+1 < len(row_index):
+                new_positions.append([row_index[row+1], col_index[col]])
             # first move may move up 2 (row = 1 means second row)
             if row == 1:
                 new_positions.append([row_index[row+2], col_index[col]])
-        elif not self.is_white:
-            new_positions.append([row_index[row-1], col_index[col]])
+        elif self.is_white:
+            if row-1 >= 0:
+                new_positions.append([row_index[row-1], col_index[col]])
             # first move may move up 2 (row = 1 means second row)
             if row == 6:
                 new_positions.append([row_index[row-2], col_index[col]])
@@ -78,6 +83,9 @@ class Rook(Piece):
         self.position = position
         self.unmoved = unmoved
         self.moves = []
+
+    def __repr__(self):
+        return f'Rook({self.is_white})'
 
     def find_possible_moves(self):
         '''
@@ -104,6 +112,9 @@ class Knight(Piece):
         self.position = position
         self.unmoved = unmoved
         self.moves = []
+
+    def __repr__(self):
+        return f'Knight({self.is_white})'
 
     def find_possible_moves(self):
         '''
@@ -145,8 +156,7 @@ class Knight(Piece):
             new_row, new_col = row_index[row_i-1], col_index[col_i-2]
             new_positions.append([new_row, new_col])
 
-        return new_positions
-            
+        return new_positions  
 
 class Bishop(Piece):
     def __init__(self, is_dead, is_white, position, unmoved):
@@ -156,6 +166,9 @@ class Bishop(Piece):
         self.position = position
         self.unmoved = unmoved
         self.moves = []
+
+    def __repr__(self):
+        return f'Bishop({self.is_white})'
 
     def find_possible_moves(self):
         '''
@@ -195,6 +208,9 @@ class Queen(Piece):
         self.position = position
         self.unmoved = unmoved
         self.moves = []
+    
+    def __repr__(self):
+        return f'Queen({self.is_white})'
 
     def find_possible_moves(self):
         '''
@@ -234,7 +250,6 @@ class Queen(Piece):
         
         return new_positions
 
-
 class King(Piece):
     def __init__(self, is_dead, is_white, position, unmoved):
         self.is_dead = is_dead
@@ -243,6 +258,9 @@ class King(Piece):
         self.position = position
         self.unmoved = unmoved
         self.moves = []
+
+    def __repr__(self):
+        return f'King({self.is_white})'
 
     def find_possible_moves(self):
         '''

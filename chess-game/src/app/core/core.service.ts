@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
+import  { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 
 import { Board, BoardCircle, BoardColor, Stats } from "./models/board.interface";
 import { Piece } from 'src/app/core/models/piece.interface';
@@ -11,24 +12,33 @@ import { SelectedPlayer } from "./enums/selected-player";
 })
 export class CoreService { 
 
+    // baseURL: string = "https://1ososgx4a0.execute-api.us-east-1.amazonaws.com";
     baseURL: string = "http://127.0.0.1:5000/";
-
-    constructor (private http: HttpClient) {}
 
     board: Board;
     stats: Stats;
     selectedPlayer: SelectedPlayer;
     moves: string[] = [];
 
+    constructor (
+        private http: HttpClient, 
+        private breakpointObserver: BreakpointObserver
+        ) {}
+
+    observeBreakpoints(): Observable<BreakpointState> {
+        return this.breakpointObserver.observe([
+            Breakpoints.Handset, Breakpoints.Tablet, Breakpoints.Web
+        ])
+    };
     boardColor: BoardColor = { 
-        1: { a: 'black', b: 'white', c: 'black', d: 'white', e: 'black', f: 'white', g: 'black', h: 'white' },
-        2: { a: 'white', b: 'black', c: 'white', d: 'black', e: 'white', f: 'black', g: 'white', h: 'black' },
-        3: { a: 'black', b: 'white', c: 'black', d: 'white', e: 'black', f: 'white', g: 'black', h: 'white' },
-        4: { a: 'white', b: 'black', c: 'white', d: 'black', e: 'white', f: 'black', g: 'white', h: 'black' },
-        5: { a: 'black', b: 'white', c: 'black', d: 'white', e: 'black', f: 'white', g: 'black', h: 'white' },
-        6: { a: 'white', b: 'black', c: 'white', d: 'black', e: 'white', f: 'black', g: 'white', h: 'black' },
-        7: { a: 'black', b: 'white', c: 'black', d: 'white', e: 'black', f: 'white', g: 'black', h: 'white' },
-        8: { a: 'white', b: 'black', c: 'white', d: 'black', e: 'white', f: 'black', g: 'white', h: 'black' },
+        1: { a: 'white', b: 'black', c: 'white', d: 'black', e: 'white', f: 'black', g: 'white', h: 'black' },
+        2: { a: 'black', b: 'white', c: 'black', d: 'white', e: 'black', f: 'white', g: 'black', h: 'white' },
+        3: { a: 'white', b: 'black', c: 'white', d: 'black', e: 'white', f: 'black', g: 'white', h: 'black' },
+        4: { a: 'black', b: 'white', c: 'black', d: 'white', e: 'black', f: 'white', g: 'black', h: 'white' },
+        5: { a: 'white', b: 'black', c: 'white', d: 'black', e: 'white', f: 'black', g: 'white', h: 'black' },
+        6: { a: 'black', b: 'white', c: 'black', d: 'white', e: 'black', f: 'white', g: 'black', h: 'white' },
+        7: { a: 'white', b: 'black', c: 'white', d: 'black', e: 'white', f: 'black', g: 'white', h: 'black' },
+        8: { a: 'black', b: 'white', c: 'black', d: 'white', e: 'black', f: 'white', g: 'black', h: 'white' },
     }
 
     boardEmptyCircle(): BoardCircle {
@@ -68,30 +78,16 @@ export class CoreService {
         this.resetMoves()
         this.board = {
             1: { 
-                a: this.piece('rook', 'white'), 
-                b: this.piece('knight', 'white'), 
-                c: this.piece('bishop', 'white'), 
-                d: this.piece('queen', 'white'), 
-                e: this.piece('king', 'white'), 
-                f: this.piece('bishop', 'white'), 
-                g: this.piece('knight', 'white'), 
-                h: this.piece('rook', 'white') 
+                a: this.piece('rook', 'black'), 
+                b: this.piece('knight', 'black'), 
+                c: this.piece('bishop', 'black'), 
+                d: this.piece('queen', 'black'), 
+                e: this.piece('king', 'black'), 
+                f: this.piece('bishop', 'black'), 
+                g: this.piece('knight', 'black'), 
+                h: this.piece('rook', 'black') 
             },
             2: { 
-                a: this.piece('pawn', 'white'), 
-                b: this.piece('pawn', 'white'), 
-                c: this.piece('pawn', 'white'), 
-                d: this.piece('pawn', 'white'), 
-                e: this.piece('pawn', 'white'), 
-                f: this.piece('pawn', 'white'), 
-                g: this.piece('pawn', 'white'), 
-                h: this.piece('pawn', 'white') 
-            },
-            3: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
-            4: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
-            5: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
-            6: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
-            7: { 
                 a: this.piece('pawn', 'black'), 
                 b: this.piece('pawn', 'black'), 
                 c: this.piece('pawn', 'black'), 
@@ -101,78 +97,99 @@ export class CoreService {
                 g: this.piece('pawn', 'black'), 
                 h: this.piece('pawn', 'black') 
             },
+            3: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
+            4: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
+            5: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
+            6: { a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null },
+            7: { 
+                a: this.piece('pawn', 'white'), 
+                b: this.piece('pawn', 'white'), 
+                c: this.piece('pawn', 'white'), 
+                d: this.piece('pawn', 'white'), 
+                e: this.piece('pawn', 'white'), 
+                f: this.piece('pawn', 'white'), 
+                g: this.piece('pawn', 'white'), 
+                h: this.piece('pawn', 'white') 
+            },
             8: { 
-                a: this.piece('rook', 'black'), 
-                b: this.piece('knight', 'black'), 
-                c: this.piece('bishop', 'black'), 
-                d: this.piece('queen', 'black'), 
-                e: this.piece('king', 'black'), 
-                f: this.piece('bishop', 'black'), 
-                g: this.piece('knight', 'black'), 
-                h: this.piece('rook', 'black')
+                a: this.piece('rook', 'white'), 
+                b: this.piece('knight', 'white'), 
+                c: this.piece('bishop', 'white'), 
+                d: this.piece('queen', 'white'), 
+                e: this.piece('king', 'white'), 
+                f: this.piece('bishop', 'white'), 
+                g: this.piece('knight', 'white'), 
+                h: this.piece('rook', 'white')
             },
         };
         Object.keys(this.board['2']).map((key, val) => {
-            if (this.board['2'][key]) { 
-                this.board['2'][key].moves = [
-                    {
-                        isKill: false,
-                        newPosition: ['3', key]
-                    },
-                    {
-                        isKill: false,
-                        newPosition: ['4', key]
-                    }
-                ]
-            }
-            // if (this.board['7'][key]) { 
-            //     this.board['7'][key].moves = [
+            // if (this.board['2'][key]) { 
+            //     this.board['2'][key].moves = [
             //         {
             //             isKill: false,
-            //             newPosition: ['6', key]
+            //             newPosition: ['3', key]
             //         },
             //         {
             //             isKill: false,
-            //             newPosition: ['5', key]
+            //             newPosition: ['4', key]
             //         }
             //     ]
             // }
+            if (this.board['7'][key]) { 
+                this.board['7'][key].moves = [
+                    {
+                        isKill: false,
+                        newPosition: ['6', key]
+                    },
+                    {
+                        isKill: false,
+                        newPosition: ['5', key]
+                    }
+                ]
+            }
         })
         localStorage.setItem('board', JSON.stringify(this.board))
         return this.board
     }
 
     getSelectedPlayer() { 
-        this.selectedPlayer = JSON.parse(localStorage.getItem('selectedPlayer')) ? JSON.parse(localStorage.getItem('selectedPlayer')) : SelectedPlayer.WHITE
-        return this.selectedPlayer
+        if (this.selectedPlayer) { 
+            return this.selectedPlayer
+        } else {
+            if (localStorage.getItem('selectedPlayer')) {
+                if (localStorage.getItem('selectedPlayer') === 'WHITE') {
+                    return SelectedPlayer.WHITE
+                } else {
+                    return SelectedPlayer.BLACK
+                }
+            } else {    
+                return SelectedPlayer.WHITE
+            }
+        }
     }
 
-    updateSelectedPlayer() { 
-        if (this.selectedPlayer === SelectedPlayer.WHITE) { 
-            this.selectedPlayer = SelectedPlayer.BLACK;
-        } else { 
-            this.selectedPlayer = SelectedPlayer.WHITE;
-        }
-        localStorage.setItem('selectedPlayer', JSON.stringify(this.selectedPlayer))
-        // console.log(localStorage.getItem('selectedPlayer'))
-        // console.log(this.selectedPlayer)
+    updateSelectedPlayer(selectedPlayer: SelectedPlayer) { 
+        localStorage.setItem('selectedPlayer', selectedPlayer)
+        this.selectedPlayer = selectedPlayer;
     }
 
     resetSelectedPlayer() { 
         this.selectedPlayer = SelectedPlayer.WHITE;
-        localStorage.setItem('selectedPlayer', JSON.stringify(this.selectedPlayer))
+        localStorage.setItem('selectedPlayer', this.selectedPlayer)
         return this.selectedPlayer
     }
 
-    findMoves(board: Board): Observable<any> { 
-        // console.log(this.selectedPlayer)
-        const body = JSON.stringify({"board": board, "selectedPlayer": this.selectedPlayer}) 
-        // const body = JSON.stringify(board) 
-        return this.http.post<any>(this.baseURL + '/findmoves', body)
+    findMoves(board: Board): Observable<any> | any { 
+        if (this.selectedPlayer) { 
+            const body = JSON.stringify({"board": board, "selectedPlayer": localStorage.getItem('selectedPlayer')}) 
+            return this.http.post<any>(this.baseURL + '/findmoves', body)
+        } else {
+            return of({board: this.getBoard(), selectedPlayer: localStorage.getItem('selectedPlayer')})
+        }
     }
 
     addMoves(move): any { 
-        this.moves.push(move)
+        this.moves.unshift(move)
         localStorage.setItem('moves', JSON.stringify(this.moves))
     }
 
@@ -184,5 +201,20 @@ export class CoreService {
     resetMoves() { 
         this.moves = []
         localStorage.setItem('moves', JSON.stringify(this.moves))
+    }
+
+    // actual coordinates for chess is a mirror image of what I had before
+    correctRow(row: number) { 
+        const a = {
+            1: 8,
+            2: 7,
+            3: 6,
+            4: 5,
+            5: 4,
+            6: 3,
+            7: 2,
+            8: 1
+        }
+        return a[row]
     }
 }
