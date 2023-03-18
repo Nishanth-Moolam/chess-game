@@ -43,6 +43,8 @@ export class BoardComponent implements OnInit {
         this.nextPlayer = res.selectedPlayer
         this.coreService.updateSelectedPlayer(this.nextPlayer);
         this.coreService.updateBoard(this.board)
+        console.log('Current Player')
+        console.log(localStorage.getItem('selectedPlayer'))
       }, (error) => { 
         console.log(error)
         this.errorMessage = error;
@@ -98,7 +100,9 @@ export class BoardComponent implements OnInit {
     this.move = { 
       start: [this.correctRow(this.startingPosition[0]), this.startingPosition[1]], 
       end: [this.correctRow(row), col],
-      piece: movingPiece
+      piece: movingPiece,
+      castle: move.castle,
+      kill: destPiece
     }
     this.coreService.addMoves(this.move)
     this.updateMoves.emit(this.move);
@@ -119,5 +123,14 @@ export class BoardComponent implements OnInit {
 
   correctRow(row) {
     return this.coreService.correctRow(row)
+  }
+
+  reverseMove() { 
+    // connect this to moves component
+    this.coreService.reverseMove().subscribe((res) => {
+      let moves = res ? res : []
+    })
+    this.getData()
+    this.updateMoves.emit(this.move);
   }
 }

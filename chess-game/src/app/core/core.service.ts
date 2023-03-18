@@ -171,6 +171,8 @@ export class CoreService {
     updateSelectedPlayer(selectedPlayer: SelectedPlayer) { 
         localStorage.setItem('selectedPlayer', selectedPlayer)
         this.selectedPlayer = selectedPlayer;
+        console.log('Current Player')
+        console.log( this.selectedPlayer, localStorage.getItem('selectedPlayer'))
     }
 
     resetSelectedPlayer() { 
@@ -195,6 +197,36 @@ export class CoreService {
 
     getMoves(): Observable<any> { 
         this.moves = JSON.parse(localStorage.getItem('moves')) ? JSON.parse(localStorage.getItem('moves')) : []
+        return of(this.moves)
+    }
+
+    reverseMove(): Observable<any> {
+        const reversedMove: any = this.moves.shift();
+        localStorage.setItem('moves', JSON.stringify(this.moves))
+
+        this.board[this.correctRow(reversedMove.start[0])][reversedMove.start[1]] = this.board[this.correctRow(reversedMove.end[0])][reversedMove.end[1]]
+        if (reversedMove.kill) { 
+            this.board[this.correctRow(reversedMove.end[0])][reversedMove.end[1]] = reversedMove.kill
+        } else { 
+            this.board[this.correctRow(reversedMove.end[0])][reversedMove.end[1]] = null
+        }
+        if (reversedMove.castle) {
+            this.board[this.correctRow(reversedMove.castle.rookStartPosition[0])][reversedMove.castle.rookStartPosition[1]] = this.board[this.correctRow(reversedMove.castle.rookEndPosition[0])][reversedMove.castle.rookEndPosition[1]]
+        }
+        localStorage.setItem('board', JSON.stringify(this.board))
+
+        // if (this.selectedPlayer === SelectedPlayer.WHITE) {
+        //     this.selectedPlayer = SelectedPlayer.BLACK
+        // } else {
+        //     this.selectedPlayer = SelectedPlayer.WHITE
+        // }
+        // localStorage.setItem('selectedPlayer', this.selectedPlayer)
+        // console.log('test')
+        this.findMoves(this.board).subscribe((data) => {
+            this.updateSelectedPlayer(data.selectedPlayer)
+            this.updateBoard(data.board)
+        })
+
         return of(this.moves)
     }
 
