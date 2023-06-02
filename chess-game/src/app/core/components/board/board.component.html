@@ -16,5 +16,5 @@
             </td>
         </tr> 
     </table>
-    <button (click)="reverseMove()">Reverse Move</button>
+    <button [disabled]="loading" class="reverse-button" (click)="reverseMove()">Reverse Move</button>
 </div>

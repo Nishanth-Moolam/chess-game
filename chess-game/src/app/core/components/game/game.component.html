@@ -1,5 +1,5 @@
 <div [ngClass]="{'mobile': mediaType === media.MOBILE}">
-    <div *ngIf="mediaType === media.WEB; else mobileView">
+    <div *ngIf="mediaType !== media.MOBILE; else mobileView">
         <div>
             <div class="title">
                 <b>CHESS!</b>
@@ -11,6 +11,7 @@
                     <tr>
                         <th>
                             <button (click)="resetBoard()">Reset</button>
+                            <--- Click Me
                         </th>
                     </tr>
                 </table>
@@ -35,7 +36,7 @@
         <app-board (updateMoves)="onUpdateMoves()" [board]="board"></app-board>
         <table>
             <tr>
-                <th><button (click)="resetBoard()">Reset</button></th>
+                <th><button (click)="resetBoard()">Reset</button><--- Click Me</th>
             </tr>
         </table>
         <table>

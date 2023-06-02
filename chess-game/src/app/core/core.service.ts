@@ -12,8 +12,8 @@ import { SelectedPlayer } from "./enums/selected-player";
 })
 export class CoreService { 
 
-    // baseURL: string = "https://1ososgx4a0.execute-api.us-east-1.amazonaws.com";
-    baseURL: string = "http://127.0.0.1:5000/";
+    baseURL: string = "https://1ososgx4a0.execute-api.us-east-1.amazonaws.com";
+    // baseURL: string = "http://127.0.0.1:5000/";
 
     board: Board;
     stats: Stats;
@@ -182,6 +182,7 @@ export class CoreService {
     }
 
     findMoves(board: Board): Observable<any> | any { 
+        console.log(this.selectedPlayer)
         if (this.selectedPlayer) { 
             const body = JSON.stringify({"board": board, "selectedPlayer": localStorage.getItem('selectedPlayer')}) 
             return this.http.post<any>(this.baseURL + '/findmoves', body)
@@ -204,30 +205,34 @@ export class CoreService {
         const reversedMove: any = this.moves.shift();
         localStorage.setItem('moves', JSON.stringify(this.moves))
 
-        this.board[this.correctRow(reversedMove.start[0])][reversedMove.start[1]] = this.board[this.correctRow(reversedMove.end[0])][reversedMove.end[1]]
-        if (reversedMove.kill) { 
-            this.board[this.correctRow(reversedMove.end[0])][reversedMove.end[1]] = reversedMove.kill
-        } else { 
-            this.board[this.correctRow(reversedMove.end[0])][reversedMove.end[1]] = null
-        }
-        if (reversedMove.castle) {
-            this.board[this.correctRow(reversedMove.castle.rookStartPosition[0])][reversedMove.castle.rookStartPosition[1]] = this.board[this.correctRow(reversedMove.castle.rookEndPosition[0])][reversedMove.castle.rookEndPosition[1]]
-        }
-        localStorage.setItem('board', JSON.stringify(this.board))
+        if (reversedMove) { 
+            this.board[this.correctRow(reversedMove.start[0])][reversedMove.start[1]] = this.board[this.correctRow(reversedMove.end[0])][reversedMove.end[1]]
+            if (reversedMove.kill) { 
+                this.board[this.correctRow(reversedMove.end[0])][reversedMove.end[1]] = reversedMove.kill
+            } else { 
+                this.board[this.correctRow(reversedMove.end[0])][reversedMove.end[1]] = null
+            }
+            if (reversedMove.castle) {
+                this.board[this.correctRow(reversedMove.castle.rookStartPosition[0])][reversedMove.castle.rookStartPosition[1]] = this.board[this.correctRow(reversedMove.castle.rookEndPosition[0])][reversedMove.castle.rookEndPosition[1]]
+            }
+            localStorage.setItem('board', JSON.stringify(this.board))
 
-        // if (this.selectedPlayer === SelectedPlayer.WHITE) {
-        //     this.selectedPlayer = SelectedPlayer.BLACK
-        // } else {
-        //     this.selectedPlayer = SelectedPlayer.WHITE
-        // }
-        // localStorage.setItem('selectedPlayer', this.selectedPlayer)
-        // console.log('test')
-        this.findMoves(this.board).subscribe((data) => {
-            this.updateSelectedPlayer(data.selectedPlayer)
-            this.updateBoard(data.board)
-        })
+            // if (this.selectedPlayer === SelectedPlayer.WHITE) {
+            //     this.selectedPlayer = SelectedPlayer.BLACK
+            // } else {
+            //     this.selectedPlayer = SelectedPlayer.WHITE
+            // }
+            // localStorage.setItem('selectedPlayer', this.selectedPlayer)
+            // console.log('test')
+            this.findMoves(this.board).subscribe((data) => {
+                this.updateSelectedPlayer(data.selectedPlayer)
+                this.updateBoard(data.board)
+            })
 
-        return of(this.moves)
+            return of(this.moves)
+        }
+ 
+        return of(null)
     }
 
     resetMoves() { 

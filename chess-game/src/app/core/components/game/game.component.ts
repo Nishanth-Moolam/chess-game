@@ -28,11 +28,8 @@ export class GameComponent implements OnInit {
       this.moves = res ? res : []
     })
     this.coreService.observeBreakpoints().subscribe((state) => {
-      this.mediaType = state.breakpoints[Breakpoints.HandsetLandscape] || 
-        state.breakpoints[Breakpoints.HandsetPortrait] ||  
-        state.breakpoints[Breakpoints.TabletLandscape] || 
-        state.breakpoints[Breakpoints.TabletPortrait] ? 
-        Media.MOBILE : Media.WEB
+      this.mediaType = state.breakpoints[Breakpoints.WebLandscape] || 
+        state.breakpoints[Breakpoints.TabletLandscape]  ? Media.WEB : Media.MOBILE
     })
   }
 

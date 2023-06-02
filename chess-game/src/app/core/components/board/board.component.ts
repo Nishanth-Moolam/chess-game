@@ -55,26 +55,28 @@ export class BoardComponent implements OnInit {
   }
 
   findMovesOrMovePiece(row: string, col: string) {
-    if (!this.showCircle) { 
-      this.boardCircle = this.coreService.boardEmptyCircle()
-      let moves = this.board[row][col]?.moves
-      if (moves) { 
-        moves?.map((move) => { 
-          if (move) { 
-            let position = move.newPosition
-            this.boardCircle[position[0]][position[1]] = true 
-          }
-        })
-        this.startingPosition = [row, col]
-        this.showCircle = true
-      }
-    } else { 
-      if (!this.boardCircle[row][col]) { 
+    if (!this.loading) { 
+      if (!this.showCircle) { 
         this.boardCircle = this.coreService.boardEmptyCircle()
-        this.startingPosition = []
-        this.showCircle = false
+        let moves = this.board[row][col]?.moves
+        if (moves) { 
+          moves?.map((move) => { 
+            if (move) { 
+              let position = move.newPosition
+              this.boardCircle[position[0]][position[1]] = true 
+            }
+          })
+          this.startingPosition = [row, col]
+          this.showCircle = true
+        }
       } else { 
-        this.movePiece(row, col)
+        if (!this.boardCircle[row][col]) { 
+          this.boardCircle = this.coreService.boardEmptyCircle()
+          this.startingPosition = []
+          this.showCircle = false
+        } else { 
+          this.movePiece(row, col)
+        }
       }
     }
   }
@@ -126,11 +128,13 @@ export class BoardComponent implements OnInit {
   }
 
   reverseMove() { 
-    // connect this to moves component
-    this.coreService.reverseMove().subscribe((res) => {
-      let moves = res ? res : []
-    })
-    this.getData()
-    this.updateMoves.emit(this.move);
+    if (!this.loading) { 
+      this.coreService.reverseMove().subscribe((res) => {
+        if (res) { 
+          this.getData()
+          this.updateMoves.emit(this.move);
+        }
+      })
+    }
   }
 }
